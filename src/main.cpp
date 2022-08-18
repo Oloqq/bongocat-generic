@@ -11,8 +11,12 @@ int main(int argc, char ** argv) {
 #else
 int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
 #endif
+    if (AttachConsole(ATTACH_PARENT_PROCESS)) {
+        freopen("CONOUT$","wb",stdout);
+        freopen("CONOUT$","wb",stderr);
+    }
 
-    window.create(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Bongo Cat for osu!", sf::Style::Titlebar | sf::Style::Close);
+    window.create(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "siema to ja klade lufe jedzie dzielnicowy kurwa chuj mu w dupe", sf::Style::Titlebar | sf::Style::Close);
     window.setFramerateLimit(MAX_FRAMERATE);
 
     // loading configs
