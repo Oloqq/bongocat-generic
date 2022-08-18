@@ -42,7 +42,7 @@ bool init() {
 
 void draw() {
     window.draw(bg);
-    
+
     // drawing left-right keypresses
     bool left_key = false;
     for (Json::Value &v : left_key_value) {

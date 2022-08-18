@@ -561,12 +561,12 @@ void drawDebugPanel() {
     leftstick_axis.y = sf::Joystick::getAxisPosition(joy_id, sf::Joystick::Y);
     rightstick_axis.x = sf::Joystick::getAxisPosition(joy_id, sf::Joystick::U);
     rightstick_axis.y = sf::Joystick::getAxisPosition(joy_id, sf::Joystick::V);
-    
+
     dpad_axis.x = sf::Joystick::getAxisPosition(joy_id, sf::Joystick::PovX);
     dpad_axis.y = sf::Joystick::getAxisPosition(joy_id, sf::Joystick::PovY);
 
-    left_trigger_axis = sf::Joystick::getAxisPosition(joy_id, sf::Joystick::Z); 
-    right_trigger_axis = sf::Joystick::getAxisPosition(joy_id, sf::Joystick::R); 
+    left_trigger_axis = sf::Joystick::getAxisPosition(joy_id, sf::Joystick::Z);
+    right_trigger_axis = sf::Joystick::getAxisPosition(joy_id, sf::Joystick::R);
 
     result << "LStick : " << "( " << leftstick_axis.x << "," << leftstick_axis.y << " )" << std::endl;
     result << "RStick : " << "( " << rightstick_axis.x << "," << rightstick_axis.y << " )" << std::endl;

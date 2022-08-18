@@ -276,7 +276,7 @@ void draw() {
     } else {
         right_key_state = false;
     }
-    
+
     bool wave_key = false;
 
     for (Json::Value &v : wave_key_value) {
@@ -335,7 +335,7 @@ void draw() {
     if (!is_mouse) {
         window.draw(device);
     }
-    
+
     // draw smoke
     bool is_smoke_key_pressed = false;
 
