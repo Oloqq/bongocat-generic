@@ -20,6 +20,8 @@ void create_config() {
     const char *s =
         R"V0G0N({
     "mode": 1,
+    "width": 612,
+    "height": 352,
     "resolution": {
         "letterboxing": false,
         "width": 1920,

@@ -16,13 +16,12 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
         freopen("CONOUT$","wb",stderr);
     }
 
-    window.create(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "siema to ja klade lufe jedzie dzielnicowy kurwa chuj mu w dupe", sf::Style::Titlebar | sf::Style::Close);
-    window.setFramerateLimit(MAX_FRAMERATE);
-
     // loading configs
     while (!data::init()) {
         continue;
     }
+    window.create(sf::VideoMode(data::cfg["width"].asInt(), data::cfg["height"].asInt()), "Bongocat", sf::Style::Titlebar | sf::Style::Close);
+    window.setFramerateLimit(MAX_FRAMERATE);
 
     // initialize input
     if (!input::init()) {

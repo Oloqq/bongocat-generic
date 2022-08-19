@@ -1,7 +1,5 @@
 #pragma once
 #define BONGO_KEYPRESS_THRESHOLD 0
-#define WINDOW_WIDTH 612
-#define WINDOW_HEIGHT 352
 #define MAX_FRAMERATE 60
 
 #include <iostream>
