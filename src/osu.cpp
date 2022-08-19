@@ -18,9 +18,13 @@ bool wave_key_state = false;
 bool previous_smoke_key_state = false;
 bool current_smoke_key_state = false;
 bool is_toggle_smoke = false;
+bool stretchy_arm = false;
+
 double timer_left_key = -1;
 double timer_right_key = -1;
 double timer_wave_key = -1;
+const double PI = 3.141592653589793238462643383279502884;
+const double toDeg = 180.0 / PI;
 
 bool init() {
     anchor.setFillColor(sf::Color::Blue);
@@ -32,6 +36,7 @@ bool init() {
     // getting configs
     Json::Value osu = data::cfg["osu"];
 
+    stretchy_arm = osu["stretchyArm"].asBool();
     is_mouse = osu["mouse"].asBool();
     is_enable_toggle_smoke = osu["toggleSmoke"].asBool();
 
@@ -269,6 +274,9 @@ void draw_stretchy_arm() {
     double dist = hypot(x - x_paw_start, y - y_paw_start);
     double scale = dist / IMG_LENGTH;
     arm.setScale(1, scale);
+    double alpha = asin((x_paw_start - x) / dist);
+    double deg = alpha * toDeg;
+    arm.setRotation(deg);
 
     window.draw(arm);
     window.draw(hand);
@@ -287,8 +295,6 @@ void draw_stretchy_arm() {
 }
 
 void draw_mouse() {
-    bool stretchy_arm = true;
-
     if (stretchy_arm) {
         draw_stretchy_arm();
     }
