@@ -46,11 +46,11 @@ void create_config() {
         "smoke": [67],
         "wave": [],
         "stretchyArm": true,
-        "debug": false,
-        "anchor": [162, 142],
+        "debug": true,
+        "anchor": [162, 110],
         "armImgSize": [147, 144],
         "armAnchorOffset": [67, 0],
-        "catsMouse": [0, 176, 280, 176]
+        "catsMouse": [60, 176, 180, 100, 15]
     },
     "taiko": {
         "leftCentre": [88],

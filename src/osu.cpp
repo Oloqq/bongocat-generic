@@ -27,6 +27,7 @@ double timer_right_key = -1;
 double timer_wave_key = -1;
 const double PI = 3.141592653589793238462643383279502884;
 const double toDeg = 180.0 / PI;
+double catsMouseAngle;
 
 bool init() {
     // getting configs
@@ -61,6 +62,8 @@ bool init() {
         x = osu["catsMouse"][2].asDouble();
         y = osu["catsMouse"][3].asDouble();
         catsMouseMark.setSize(sf::Vector2f(x, y));
+        catsMouseAngle = osu["catsMouse"][4].asDouble();
+        catsMouseMark.setRotation(catsMouseAngle);
     }
 
     is_mouse = osu["mouse"].asBool();
@@ -286,11 +289,16 @@ void black_magic() {
 
 void draw_stretchy_arm() {
     auto [x, y] = input::where_mouse();
-    x = x * catsMouseMark.getSize().x + catsMouseMark.getPosition().x;
-    y = y * catsMouseMark.getSize().y + catsMouseMark.getPosition().y;
+    // x = x * catsMouseMark.getSize().x + catsMouseMark.getPosition().x;
+    // y = y * catsMouseMark.getSize().y + catsMouseMark.getPosition().y;
     sf::Vector2f handPos(x, y);
 
-    // handMark.rotate(0.05);
+    // order of applying is reversed
+    sf::Transform t;
+    t.translate(catsMouseMark.getPosition());
+    t.scale(catsMouseMark.getSize());
+    t.rotate(catsMouseAngle, 0, 0);
+    handPos = t.transformPoint(handPos);
 
     handMark.setPosition(handPos);
     sf::Vector2f displacement = handPos - anchorMark.getPosition();
