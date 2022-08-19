@@ -43,7 +43,9 @@ void create_config() {
         "key2": [88],
         "smoke": [67],
         "wave": [],
-        "stretchyArm": true
+        "stretchyArm": true,
+        "debug": false,
+        "anchor": [300, 100]
     },
     "taiko": {
         "leftCentre": [88],

@@ -8,6 +8,7 @@ int paw_edge_r, paw_edge_g, paw_edge_b, paw_edge_a;
 double scale;
 bool is_mouse, is_left_handed, is_enable_toggle_smoke;
 sf::Sprite bg, up, left, right, device, smoke, wave, arm;
+bool debug;
 sf::CircleShape anchor, hand;
 
 int key_state = 0;
@@ -37,6 +38,14 @@ bool init() {
     Json::Value osu = data::cfg["osu"];
 
     stretchy_arm = osu["stretchyArm"].asBool();
+    debug = osu["debug"].asBool();
+    if (stretchy_arm) {
+        double x, y;
+        x = osu["anchor"][0].asDouble();
+        y = osu["anchor"][1].asDouble();
+        anchor.setPosition(x, y);
+    }
+
     is_mouse = osu["mouse"].asBool();
     is_enable_toggle_smoke = osu["toggleSmoke"].asBool();
 
