@@ -48,7 +48,6 @@ void create_config() {
         "stretchyArm": true,
         "debug": true,
         "anchor": [162, 110],
-        "armImgSize": [147, 144],
         "armAnchorOffset": [67, 0],
         "catsMouse": [60, 176, 180, 100, 15]
     },
