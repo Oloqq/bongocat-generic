@@ -289,16 +289,12 @@ void black_magic() {
 
 void draw_stretchy_arm() {
     auto [x, y] = input::where_mouse();
-    // x = x * catsMouseMark.getSize().x + catsMouseMark.getPosition().x;
-    // y = y * catsMouseMark.getSize().y + catsMouseMark.getPosition().y;
-    sf::Vector2f handPos(x, y);
 
-    // order of applying is reversed
     sf::Transform t;
     t.translate(catsMouseMark.getPosition());
-    t.scale(catsMouseMark.getSize());
     t.rotate(catsMouseAngle, 0, 0);
-    handPos = t.transformPoint(handPos);
+    t.scale(catsMouseMark.getSize());
+    sf::Vector2f handPos = t.transformPoint(sf::Vector2f(x, y));
 
     handMark.setPosition(handPos);
     sf::Vector2f displacement = handPos - anchorMark.getPosition();
@@ -316,17 +312,6 @@ void draw_stretchy_arm() {
         window.draw(anchorMark);
         window.draw(catsMouseMark);
     }
-
-    // Json::Value paw_draw_info = data::cfg["mousePaw"];
-    // int x_paw_start = paw_draw_info["pawStartingPoint"][0].asInt();
-    // int y_paw_start = paw_draw_info["pawStartingPoint"][1].asInt();
-    // auto [x, y] = input::where_mouse();
-    // std::vector<double> pss = {(float) x_paw_start, (float) y_paw_start};
-    // // double dist = hypot(x_paw_start - x, y_paw_start - y);
-    // arm.setPosition(x_paw_start  - 100, y_paw_start - 50);
-    // std::cout << x << " " << y << std::endl;
-    // // arm.setScale(x_paw_start - x / 1000, y_paw_start - y / 1000);
-    // window.draw(arm);
 }
 
 void draw_mouse() {
