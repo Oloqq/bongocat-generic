@@ -8,6 +8,7 @@ int paw_edge_r, paw_edge_g, paw_edge_b, paw_edge_a;
 double scale;
 bool is_mouse, is_left_handed, is_enable_toggle_smoke;
 sf::Sprite bg, up, left, right, device, smoke, wave, arm;
+sf::CircleShape anchor, hand;
 
 int key_state = 0;
 
@@ -22,6 +23,12 @@ double timer_right_key = -1;
 double timer_wave_key = -1;
 
 bool init() {
+    anchor.setFillColor(sf::Color::Blue);
+    anchor.setRadius(5);
+
+    hand.setFillColor(sf::Color::Red);
+    hand.setRadius(5);
+
     // getting configs
     Json::Value osu = data::cfg["osu"];
 
@@ -85,7 +92,7 @@ bool init() {
         device.setTexture(data::load_texture("img/osu/tablet.png"), true);
     }
     smoke.setTexture(data::load_texture("img/osu/smoke.png"));
-    arm.setTexture(data::load_texture("img/osu/arm.png"));
+    arm.setTexture(data::load_texture("img/osu/arrow.png"));
     device.setScale(scale, scale);
 
     return true;
@@ -247,16 +254,36 @@ void black_magic() {
 }
 
 void draw_stretchy_arm() {
-    Json::Value paw_draw_info = data::cfg["mousePaw"];
-    int x_paw_start = paw_draw_info["pawStartingPoint"][0].asInt();
-    int y_paw_start = paw_draw_info["pawStartingPoint"][1].asInt();
+    const int IMG_LENGTH = 100;
+
+    int x_paw_start = 300;
+    int y_paw_start = 100;
+
     auto [x, y] = input::where_mouse();
-    std::vector<double> pss = {(float) x_paw_start, (float) y_paw_start};
-    // double dist = hypot(x_paw_start - x, y_paw_start - y);
-    arm.setPosition(x_paw_start  - 100, y_paw_start - 50);
-    std::cout << x << " " << y << std::endl;
-    // arm.setScale(x_paw_start - x / 1000, y_paw_start - y / 1000);
+    x *= 600;
+    y *= 300;
+    anchor.setPosition(x_paw_start, y_paw_start);
+    hand.setPosition(x, y);
+
+    arm.setPosition(x_paw_start, y_paw_start);
+    double dist = hypot(x - x_paw_start, y - y_paw_start);
+    double scale = dist / IMG_LENGTH;
+    arm.setScale(1, scale);
+
     window.draw(arm);
+    window.draw(hand);
+    window.draw(anchor);
+
+    // Json::Value paw_draw_info = data::cfg["mousePaw"];
+    // int x_paw_start = paw_draw_info["pawStartingPoint"][0].asInt();
+    // int y_paw_start = paw_draw_info["pawStartingPoint"][1].asInt();
+    // auto [x, y] = input::where_mouse();
+    // std::vector<double> pss = {(float) x_paw_start, (float) y_paw_start};
+    // // double dist = hypot(x_paw_start - x, y_paw_start - y);
+    // arm.setPosition(x_paw_start  - 100, y_paw_start - 50);
+    // std::cout << x << " " << y << std::endl;
+    // // arm.setScale(x_paw_start - x / 1000, y_paw_start - y / 1000);
+    // window.draw(arm);
 }
 
 void draw_mouse() {
