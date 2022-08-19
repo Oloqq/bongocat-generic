@@ -129,6 +129,14 @@ bool init() {
     arm.setTexture(data::load_texture("img/osu/arm.png"));
     device.setScale(scale, scale);
 
+    if (stretchy_arm) {
+        auto b = device.getLocalBounds();
+        device.setOrigin(b.width / 2, b.height / 2);
+    }
+    else {
+        device.setOrigin(0, 0);
+    }
+
     return true;
 }
 
@@ -305,6 +313,11 @@ void draw_stretchy_arm() {
     double alpha = asin(-displacement.x / dist);
     double deg = alpha * toDeg;
     arm.setRotation(deg);
+
+    if (is_mouse) {
+        device.setPosition(handPos);
+        window.draw(device);
+    }
 
     window.draw(arm);
     if (debug) {
