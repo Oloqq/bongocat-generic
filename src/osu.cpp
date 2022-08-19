@@ -9,7 +9,8 @@ double scale;
 bool is_mouse, is_left_handed, is_enable_toggle_smoke;
 sf::Sprite bg, up, left, right, device, smoke, wave, arm;
 bool debug;
-sf::CircleShape anchor, hand;
+sf::CircleShape anchorMark, handMark;
+sf::RectangleShape catsMouseMark;
 
 int key_state = 0;
 
@@ -28,22 +29,38 @@ const double PI = 3.141592653589793238462643383279502884;
 const double toDeg = 180.0 / PI;
 
 bool init() {
-    anchor.setFillColor(sf::Color::Blue);
-    anchor.setRadius(5);
-
-    hand.setFillColor(sf::Color::Red);
-    hand.setRadius(5);
-
     // getting configs
     Json::Value osu = data::cfg["osu"];
 
     stretchy_arm = osu["stretchyArm"].asBool();
     debug = osu["debug"].asBool();
     if (stretchy_arm) {
+        anchorMark.setFillColor(sf::Color::Blue);
+        anchorMark.setRadius(5);
+
+        handMark.setFillColor(sf::Color::Red);
+        handMark.setRadius(5);
+
+        catsMouseMark.setFillColor(sf::Color::Transparent);
+        catsMouseMark.setOutlineColor(sf::Color::Yellow);
+        catsMouseMark.setOutlineThickness(2);
+
         double x, y;
+        x = osu["armAnchorOffset"][0].asDouble();
+        y = osu["armAnchorOffset"][1].asDouble();
+        arm.setOrigin(x, y);
+
         x = osu["anchor"][0].asDouble();
         y = osu["anchor"][1].asDouble();
-        anchor.setPosition(x, y);
+        anchorMark.setPosition(x, y);
+        arm.setPosition(x, y);
+
+        x = osu["catsMouse"][0].asDouble();
+        y = osu["catsMouse"][1].asDouble();
+        catsMouseMark.setPosition(x, y);
+        x = osu["catsMouse"][2].asDouble();
+        y = osu["catsMouse"][3].asDouble();
+        catsMouseMark.setSize(sf::Vector2f(x, y));
     }
 
     is_mouse = osu["mouse"].asBool();
@@ -106,7 +123,7 @@ bool init() {
         device.setTexture(data::load_texture("img/osu/tablet.png"), true);
     }
     smoke.setTexture(data::load_texture("img/osu/smoke.png"));
-    arm.setTexture(data::load_texture("img/osu/arrow.png"));
+    arm.setTexture(data::load_texture("img/osu/arm.png"));
     device.setScale(scale, scale);
 
     return true;
@@ -268,28 +285,29 @@ void black_magic() {
 }
 
 void draw_stretchy_arm() {
-    const int IMG_LENGTH = 100;
-
-    int x_paw_start = 300;
-    int y_paw_start = 100;
-
     auto [x, y] = input::where_mouse();
-    x *= 600;
-    y *= 300;
-    anchor.setPosition(x_paw_start, y_paw_start);
-    hand.setPosition(x, y);
+    x = x * catsMouseMark.getSize().x + catsMouseMark.getPosition().x;
+    y = y * catsMouseMark.getSize().y + catsMouseMark.getPosition().y;
+    sf::Vector2f handPos(x, y);
 
-    arm.setPosition(x_paw_start, y_paw_start);
-    double dist = hypot(x - x_paw_start, y - y_paw_start);
-    double scale = dist / IMG_LENGTH;
+    // handMark.rotate(0.05);
+
+    handMark.setPosition(handPos);
+    sf::Vector2f displacement = handPos - anchorMark.getPosition();
+
+    double dist = hypot(displacement.x, displacement.y);
+    double scale = dist / arm.getLocalBounds().height;
     arm.setScale(1, scale);
-    double alpha = asin((x_paw_start - x) / dist);
+    double alpha = asin(-displacement.x / dist);
     double deg = alpha * toDeg;
     arm.setRotation(deg);
 
     window.draw(arm);
-    window.draw(hand);
-    window.draw(anchor);
+    if (debug) {
+        window.draw(handMark);
+        window.draw(anchorMark);
+        window.draw(catsMouseMark);
+    }
 
     // Json::Value paw_draw_info = data::cfg["mousePaw"];
     // int x_paw_start = paw_draw_info["pawStartingPoint"][0].asInt();

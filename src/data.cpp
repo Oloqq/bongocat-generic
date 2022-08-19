@@ -47,7 +47,10 @@ void create_config() {
         "wave": [],
         "stretchyArm": true,
         "debug": false,
-        "anchor": [300, 100]
+        "anchor": [162, 142],
+        "armImgSize": [147, 144],
+        "armAnchorOffset": [67, 0],
+        "catsMouse": [0, 176, 280, 176]
     },
     "taiko": {
         "leftCentre": [88],
