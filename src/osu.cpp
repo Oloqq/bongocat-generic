@@ -7,7 +7,7 @@ int paw_r, paw_g, paw_b, paw_a;
 int paw_edge_r, paw_edge_g, paw_edge_b, paw_edge_a;
 double scale;
 bool is_mouse, is_left_handed, is_enable_toggle_smoke;
-sf::Sprite bg, up, left, right, device, smoke, wave;
+sf::Sprite bg, up, left, right, device, smoke, wave, arm;
 
 int key_state = 0;
 
@@ -85,14 +85,85 @@ bool init() {
         device.setTexture(data::load_texture("img/osu/tablet.png"), true);
     }
     smoke.setTexture(data::load_texture("img/osu/smoke.png"));
+    arm.setTexture(data::load_texture("img/osu/arm.png"));
     device.setScale(scale, scale);
 
     return true;
 }
 
-void draw() {
-    window.draw(bg);
+void draw_arm_fill(std::vector<double>& pss, std::vector<double>& pss2) {
+    sf::VertexArray fill(sf::TriangleStrip, 26);
+    for (int i = 0; i < 26; i += 2) {
+        fill[i].position = sf::Vector2f(pss2[i], pss2[i + 1]);
+        fill[i + 1].position = sf::Vector2f(pss2[52 - i - 2], pss2[52 - i - 1]);
+        fill[i].color = sf::Color(paw_r, paw_g, paw_b, paw_a);
+        fill[i + 1].color = sf::Color(paw_r, paw_g, paw_b, paw_a);
+    }
+    window.draw(fill);
+}
 
+void draw_arm_outline(std::vector<double>& pss, std::vector<double>& pss2) {
+    // drawing first arm arc (solid black, rough edges)
+    int shad = paw_edge_a / 3;
+    sf::VertexArray edge(sf::TriangleStrip, 52);
+    double width = 7;
+    sf::CircleShape circ(width / 2);
+    circ.setFillColor(sf::Color(paw_edge_r, paw_edge_g, paw_edge_b, shad));
+    circ.setPosition(pss2[0] - width / 2, pss2[1] - width / 2);
+    window.draw(circ);
+    for (int i = 0; i < 50; i += 2) {
+        double vec0 = pss2[i] - pss2[i + 2];
+        double vec1 = pss2[i + 1] - pss2[i + 3];
+        double dist = hypot(vec0, vec1);
+        edge[i].position = sf::Vector2f(pss2[i] + vec1 / dist * width / 2, pss2[i + 1] - vec0 / dist * width / 2);
+        edge[i + 1].position = sf::Vector2f(pss2[i] - vec1 / dist * width / 2, pss2[i + 1] + vec0 / dist * width / 2);
+        edge[i].color = sf::Color(paw_edge_r, paw_edge_g, paw_edge_b, shad);
+        edge[i + 1].color = sf::Color(paw_edge_r, paw_edge_g, paw_edge_b, shad);
+        width -= 0.08;
+    }
+    double vec0 = pss2[50] - pss2[48];
+    double vec1 = pss2[51] - pss2[49];
+    double dist = hypot(vec0, vec1);
+    edge[51].position = sf::Vector2f(pss2[50] + vec1 / dist * width / 2, pss2[51] - vec0 / dist * width / 2);
+    edge[50].position = sf::Vector2f(pss2[50] - vec1 / dist * width / 2, pss2[51] + vec0 / dist * width / 2);
+    edge[50].color = sf::Color(paw_edge_r, paw_edge_g, paw_edge_b, shad);
+    edge[51].color = sf::Color(paw_edge_r, paw_edge_g, paw_edge_b, shad);
+    window.draw(edge);
+    circ.setRadius(width / 2);
+    circ.setPosition(pss2[50] - width / 2, pss2[51] - width / 2);
+    window.draw(circ);
+
+    // drawing second arm arc (shadow)
+    sf::VertexArray edge2(sf::TriangleStrip, 52);
+    width = 6;
+    sf::CircleShape circ2(width / 2);
+    circ2.setFillColor(sf::Color(paw_edge_r, paw_edge_g, paw_edge_b, paw_edge_a));
+    circ2.setPosition(pss2[0] - width / 2, pss2[1] - width / 2);
+    window.draw(circ2);
+    for (int i = 0; i < 50; i += 2) {
+        vec0 = pss2[i] - pss2[i + 2];
+        vec1 = pss2[i + 1] - pss2[i + 3];
+        double dist = hypot(vec0, vec1);
+        edge2[i].position = sf::Vector2f(pss2[i] + vec1 / dist * width / 2, pss2[i + 1] - vec0 / dist * width / 2);
+        edge2[i + 1].position = sf::Vector2f(pss2[i] - vec1 / dist * width / 2, pss2[i + 1] + vec0 / dist * width / 2);
+        edge2[i].color = sf::Color(paw_edge_r, paw_edge_g, paw_edge_b, paw_edge_a);
+        edge2[i + 1].color = sf::Color(paw_edge_r, paw_edge_g, paw_edge_b, paw_edge_a);
+        width -= 0.08;
+    }
+    vec0 = pss2[50] - pss2[48];
+    vec1 = pss2[51] - pss2[49];
+    dist = hypot(vec0, vec1);
+    edge2[51].position = sf::Vector2f(pss2[50] + vec1 / dist * width / 2, pss2[51] - vec0 / dist * width / 2);
+    edge2[50].position = sf::Vector2f(pss2[50] - vec1 / dist * width / 2, pss2[51] + vec0 / dist * width / 2);
+    edge2[50].color = sf::Color(paw_edge_r, paw_edge_g, paw_edge_b, paw_edge_a);
+    edge2[51].color = sf::Color(paw_edge_r, paw_edge_g, paw_edge_b, paw_edge_a);
+    window.draw(edge2);
+    circ2.setRadius(width / 2);
+    circ2.setPosition(pss2[50] - width / 2, pss2[51] - width / 2);
+    window.draw(circ2);
+}
+
+void black_magic() {
     // initializing pss and pss2 (kuvster's magic)
     Json::Value paw_draw_info = data::cfg["mousePaw"];
     int x_paw_start = paw_draw_info["pawStartingPoint"][0].asInt();
@@ -171,74 +242,38 @@ void draw() {
         window.draw(device);
     }
 
-    // drawing arms
-    sf::VertexArray fill(sf::TriangleStrip, 26);
-    for (int i = 0; i < 26; i += 2) {
-        fill[i].position = sf::Vector2f(pss2[i], pss2[i + 1]);
-        fill[i + 1].position = sf::Vector2f(pss2[52 - i - 2], pss2[52 - i - 1]);
-        fill[i].color = sf::Color(paw_r, paw_g, paw_b, paw_a);
-        fill[i + 1].color = sf::Color(paw_r, paw_g, paw_b, paw_a);
-    }
-    window.draw(fill);
+    draw_arm_fill(pss, pss2);
+    draw_arm_outline(pss, pss2);
+}
 
-    // drawing first arm arc
-    int shad = paw_edge_a / 3;
-    sf::VertexArray edge(sf::TriangleStrip, 52);
-    double width = 7;
-    sf::CircleShape circ(width / 2);
-    circ.setFillColor(sf::Color(paw_edge_r, paw_edge_g, paw_edge_b, shad));
-    circ.setPosition(pss2[0] - width / 2, pss2[1] - width / 2);
-    window.draw(circ);
-    for (int i = 0; i < 50; i += 2) {
-        double vec0 = pss2[i] - pss2[i + 2];
-        double vec1 = pss2[i + 1] - pss2[i + 3];
-        double dist = hypot(vec0, vec1);
-        edge[i].position = sf::Vector2f(pss2[i] + vec1 / dist * width / 2, pss2[i + 1] - vec0 / dist * width / 2);
-        edge[i + 1].position = sf::Vector2f(pss2[i] - vec1 / dist * width / 2, pss2[i + 1] + vec0 / dist * width / 2);
-        edge[i].color = sf::Color(paw_edge_r, paw_edge_g, paw_edge_b, shad);
-        edge[i + 1].color = sf::Color(paw_edge_r, paw_edge_g, paw_edge_b, shad);
-        width -= 0.08;
-    }
-    double vec0 = pss2[50] - pss2[48];
-    double vec1 = pss2[51] - pss2[49];
-    dist = hypot(vec0, vec1);
-    edge[51].position = sf::Vector2f(pss2[50] + vec1 / dist * width / 2, pss2[51] - vec0 / dist * width / 2);
-    edge[50].position = sf::Vector2f(pss2[50] - vec1 / dist * width / 2, pss2[51] + vec0 / dist * width / 2);
-    edge[50].color = sf::Color(paw_edge_r, paw_edge_g, paw_edge_b, shad);
-    edge[51].color = sf::Color(paw_edge_r, paw_edge_g, paw_edge_b, shad);
-    window.draw(edge);
-    circ.setRadius(width / 2);
-    circ.setPosition(pss2[50] - width / 2, pss2[51] - width / 2);
-    window.draw(circ);
+void draw_stretchy_arm() {
+    Json::Value paw_draw_info = data::cfg["mousePaw"];
+    int x_paw_start = paw_draw_info["pawStartingPoint"][0].asInt();
+    int y_paw_start = paw_draw_info["pawStartingPoint"][1].asInt();
+    auto [x, y] = input::where_mouse();
+    std::vector<double> pss = {(float) x_paw_start, (float) y_paw_start};
+    // double dist = hypot(x_paw_start - x, y_paw_start - y);
+    arm.setPosition(x_paw_start  - 100, y_paw_start - 50);
+    std::cout << x << " " << y << std::endl;
+    // arm.setScale(x_paw_start - x / 1000, y_paw_start - y / 1000);
+    window.draw(arm);
+}
 
-    // drawing second arm arc
-    sf::VertexArray edge2(sf::TriangleStrip, 52);
-    width = 6;
-    sf::CircleShape circ2(width / 2);
-    circ2.setFillColor(sf::Color(paw_edge_r, paw_edge_g, paw_edge_b, paw_edge_a));
-    circ2.setPosition(pss2[0] - width / 2, pss2[1] - width / 2);
-    window.draw(circ2);
-    for (int i = 0; i < 50; i += 2) {
-        vec0 = pss2[i] - pss2[i + 2];
-        vec1 = pss2[i + 1] - pss2[i + 3];
-        double dist = hypot(vec0, vec1);
-        edge2[i].position = sf::Vector2f(pss2[i] + vec1 / dist * width / 2, pss2[i + 1] - vec0 / dist * width / 2);
-        edge2[i + 1].position = sf::Vector2f(pss2[i] - vec1 / dist * width / 2, pss2[i + 1] + vec0 / dist * width / 2);
-        edge2[i].color = sf::Color(paw_edge_r, paw_edge_g, paw_edge_b, paw_edge_a);
-        edge2[i + 1].color = sf::Color(paw_edge_r, paw_edge_g, paw_edge_b, paw_edge_a);
-        width -= 0.08;
+void draw_mouse() {
+    bool stretchy_arm = true;
+
+    if (stretchy_arm) {
+        draw_stretchy_arm();
     }
-    vec0 = pss2[50] - pss2[48];
-    vec1 = pss2[51] - pss2[49];
-    dist = hypot(vec0, vec1);
-    edge2[51].position = sf::Vector2f(pss2[50] + vec1 / dist * width / 2, pss2[51] - vec0 / dist * width / 2);
-    edge2[50].position = sf::Vector2f(pss2[50] - vec1 / dist * width / 2, pss2[51] + vec0 / dist * width / 2);
-    edge2[50].color = sf::Color(paw_edge_r, paw_edge_g, paw_edge_b, paw_edge_a);
-    edge2[51].color = sf::Color(paw_edge_r, paw_edge_g, paw_edge_b, paw_edge_a);
-    window.draw(edge2);
-    circ2.setRadius(width / 2);
-    circ2.setPosition(pss2[50] - width / 2, pss2[51] - width / 2);
-    window.draw(circ2);
+    else {
+        black_magic();
+    }
+}
+
+void draw() {
+    window.draw(bg);
+
+    draw_mouse();
 
     // drawing keypresses
     bool left_key = false;

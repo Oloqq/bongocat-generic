@@ -333,6 +333,17 @@ std::pair<double, double> bezier(double ratio, std::vector<double> &points, int 
     return std::make_pair(xx / 1000, yy / 1000);
 }
 
+std::pair<double, double> where_mouse() {
+    HWND handle = GetForegroundWindow();
+    double x, y;
+    POINT point;
+    if (GetCursorPos(&point)) {
+        x = (double)point.x / horizontal;
+        y = (double)point.y / vertical;
+    }
+    return std::make_pair(x, y);
+}
+
 std::pair<double, double> get_xy() {
 #if defined(__unix__) || defined(__unix)
     double letter_x, letter_y, s_height, s_width;

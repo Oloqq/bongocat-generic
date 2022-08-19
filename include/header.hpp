@@ -41,6 +41,7 @@ bool is_joystick_pressed(int key_code);
 
 std::pair<double, double> bezier(double ratio, std::vector<double> &points, int length);
 
+std::pair<double, double> where_mouse();
 std::pair<double, double> get_xy();
 
 void drawDebugPanel();
