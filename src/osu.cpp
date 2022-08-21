@@ -7,7 +7,7 @@ int paw_r, paw_g, paw_b, paw_a;
 int paw_edge_r, paw_edge_g, paw_edge_b, paw_edge_a;
 double scale;
 bool is_mouse, is_left_handed, is_enable_toggle_smoke;
-sf::Sprite bg, up, left, right, device, smoke, wave, arm;
+sf::Sprite desk, cat, up, left, right, device, smoke, wave, arm;
 bool debug;
 sf::CircleShape anchorMark, handMark;
 sf::RectangleShape catsMouseMark;
@@ -118,11 +118,12 @@ bool init() {
     left.setTexture(data::load_texture("img/osu/left.png"));
     right.setTexture(data::load_texture("img/osu/right.png"));
     wave.setTexture(data::load_texture("img/osu/wave.png"));
+    cat.setTexture(data::load_texture("img/osu/cat.png"));
     if (is_mouse) {
-        bg.setTexture(data::load_texture("img/osu/mousebg.png"));
+        desk.setTexture(data::load_texture("img/osu/mousebg.png"));
         device.setTexture(data::load_texture("img/osu/mouse.png"), true);
     } else {
-        bg.setTexture(data::load_texture("img/osu/tabletbg.png"));
+        desk.setTexture(data::load_texture("img/osu/tabletbg.png"));
         device.setTexture(data::load_texture("img/osu/tablet.png"), true);
     }
     smoke.setTexture(data::load_texture("img/osu/smoke.png"));
@@ -337,10 +338,11 @@ void draw_mouse() {
 }
 
 void draw() {
-    window.draw(bg);
+    window.draw(desk);
 
     draw_mouse();
 
+    window.draw(cat);
     // drawing keypresses
     bool left_key = false;
 
