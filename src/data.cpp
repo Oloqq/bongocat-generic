@@ -14,6 +14,7 @@ extern "C" {
 
 namespace data {
 Json::Value cfg;
+std::string skin = "default";
 std::map<std::string, sf::Texture> img_holder;
 
 void create_config() {
@@ -165,10 +166,20 @@ bool update(Json::Value &cfg_default, Json::Value &cfg) {
     return is_update;
 }
 
+std::string config_path() {
+    std::ifstream skin_list("skin.txt");
+    if (skin_list.good()) {
+        getline(skin_list, skin);
+    }
+    std::cout << skin << std::endl;
+    return "skins/" + skin + "/config.json";
+}
+
 bool init() {
     while (true) {
+        std::string path = config_path();
         create_config();
-        std::ifstream cfg_file("config.json", std::ifstream::binary);
+        std::ifstream cfg_file(path, std::ifstream::binary);
         if (!cfg_file.good()) {
             break;
         }

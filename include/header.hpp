@@ -21,6 +21,7 @@ extern sf::RenderWindow window;
 
 namespace data {
 extern Json::Value cfg;
+extern std::string skin;
 
 void error_msg(std::string error, std::string title);
 

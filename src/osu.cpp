@@ -28,6 +28,9 @@ double timer_wave_key = -1;
 const double PI = 3.141592653589793238462643383279502884;
 const double toDeg = 180.0 / PI;
 double catsMouseAngle;
+// std::string skin = "default";
+std::string skin = data::skin;
+std::string skinpath = "skins/" + skin + "/";
 
 void toggle_debug() {
     debug = !debug;
@@ -110,15 +113,17 @@ bool init() {
     scale = (data::cfg["decoration"]["scalar"])[0].asDouble();
 
     // importing sprites
-    up.setTexture(data::load_texture("img/osu/up.png"));
-    left.setTexture(data::load_texture("img/osu/left.png"));
-    right.setTexture(data::load_texture("img/osu/right.png"));
-    wave.setTexture(data::load_texture("img/osu/wave.png"));
-    cat.setTexture(data::load_texture("img/osu/avatar.png"));
-    desk.setTexture(data::load_texture("img/osu/desk.png"));
-    device.setTexture(data::load_texture("img/osu/mouse.png"), true);
-    smoke.setTexture(data::load_texture("img/osu/smoke.png"));
-    arm.setTexture(data::load_texture("img/osu/arm.png"));
+    skin = data::skin;
+    skinpath = "skins/" + skin + "/";
+    up.setTexture(data::load_texture(skinpath + "up.png"));
+    left.setTexture(data::load_texture(skinpath + "left.png"));
+    right.setTexture(data::load_texture(skinpath + "right.png"));
+    wave.setTexture(data::load_texture(skinpath + "wave.png"));
+    cat.setTexture(data::load_texture(skinpath + "avatar.png"));
+    desk.setTexture(data::load_texture(skinpath + "desk.png"));
+    device.setTexture(data::load_texture(skinpath + "mouse.png"), true);
+    smoke.setTexture(data::load_texture(skinpath + "smoke.png"));
+    arm.setTexture(data::load_texture(skinpath + "arm.png"));
     device.setScale(scale, scale);
 
     if (stretchy_arm) {
