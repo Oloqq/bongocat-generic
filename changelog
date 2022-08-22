@@ -1,5 +1,10 @@
 # x
 - avatar is now on a separate layer from the desk
+TODO debug dots on top of cat
+TODO cat synonymous with avatar
+TODO implement skins (config per skin)
+TODO auto resize window to match the desk / handle resize in config on ctrl-r
+TODO file renames
 
 # 1.0.0
 - initial

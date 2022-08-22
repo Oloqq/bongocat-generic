@@ -1,7 +1,7 @@
 {
     "mode": 1,
     "width": 612,
-    "height": 352,
+    "height": 467,
     "resolution": {
         "letterboxing": false,
         "width": 1920,
@@ -26,9 +26,9 @@
         "wave": [86],
         "stretchyArm": true,
         "debug": true,
-        "anchor": [162, 110],
+        "anchor": [195, 240],
         "armAnchorOffset": [67, 0],
-        "catsMouse": [60, 176, 180, 100, 15]
+        "catsMouse": [40, 290, 180, 90, 15]
     },
     "taiko": {
         "leftCentre": [88],
