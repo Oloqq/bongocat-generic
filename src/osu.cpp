@@ -6,7 +6,7 @@ int offset_x, offset_y;
 int paw_r, paw_g, paw_b, paw_a;
 int paw_edge_r, paw_edge_g, paw_edge_b, paw_edge_a;
 double scale;
-bool is_mouse, is_left_handed, is_enable_toggle_smoke;
+bool is_left_handed, is_enable_toggle_smoke;
 sf::Sprite desk, cat, up, left, right, device, smoke, wave, arm;
 bool debug;
 sf::CircleShape anchorMark, handMark;
@@ -69,8 +69,6 @@ bool init() {
         catsMouseAngle = osu["catsMouse"][4].asDouble();
         catsMouseMark.setRotation(catsMouseAngle);
     }
-
-    is_mouse = osu["mouse"].asBool();
     is_enable_toggle_smoke = osu["toggleSmoke"].asBool();
 
     paw_r = osu["paw"][0].asInt();
@@ -107,29 +105,18 @@ bool init() {
 
     is_left_handed = data::cfg["decoration"]["leftHanded"].asBool();
 
-    if (is_mouse) {
-        offset_x = (data::cfg["decoration"]["offsetX"])[0].asInt();
-        offset_y = (data::cfg["decoration"]["offsetY"])[0].asInt();
-        scale = (data::cfg["decoration"]["scalar"])[0].asDouble();
-    } else {
-        offset_x = (data::cfg["decoration"]["offsetX"])[1].asInt();
-        offset_y = (data::cfg["decoration"]["offsetY"])[1].asInt();
-        scale = (data::cfg["decoration"]["scalar"])[1].asDouble();
-    }
+    offset_x = (data::cfg["decoration"]["offsetX"])[0].asInt();
+    offset_y = (data::cfg["decoration"]["offsetY"])[0].asInt();
+    scale = (data::cfg["decoration"]["scalar"])[0].asDouble();
 
     // importing sprites
     up.setTexture(data::load_texture("img/osu/up.png"));
     left.setTexture(data::load_texture("img/osu/left.png"));
     right.setTexture(data::load_texture("img/osu/right.png"));
     wave.setTexture(data::load_texture("img/osu/wave.png"));
-    cat.setTexture(data::load_texture("img/osu/cat.png"));
-    if (is_mouse) {
-        desk.setTexture(data::load_texture("img/osu/mousebg.png"));
-        device.setTexture(data::load_texture("img/osu/mouse.png"), true);
-    } else {
-        desk.setTexture(data::load_texture("img/osu/tabletbg.png"));
-        device.setTexture(data::load_texture("img/osu/tablet.png"), true);
-    }
+    cat.setTexture(data::load_texture("img/osu/avatar.png"));
+    desk.setTexture(data::load_texture("img/osu/desk.png"));
+    device.setTexture(data::load_texture("img/osu/mouse.png"), true);
     smoke.setTexture(data::load_texture("img/osu/smoke.png"));
     arm.setTexture(data::load_texture("img/osu/arm.png"));
     device.setScale(scale, scale);
@@ -217,89 +204,6 @@ void draw_arm_outline(std::vector<double>& pss, std::vector<double>& pss2) {
     window.draw(circ2);
 }
 
-void black_magic() {
-    // initializing pss and pss2 (kuvster's magic)
-    Json::Value paw_draw_info = data::cfg["mousePaw"];
-    int x_paw_start = paw_draw_info["pawStartingPoint"][0].asInt();
-    int y_paw_start = paw_draw_info["pawStartingPoint"][1].asInt();
-    auto [x, y] = input::get_xy();
-    int oof = 6;
-    std::vector<double> pss = {(float) x_paw_start, (float) y_paw_start};
-    double dist = hypot(x_paw_start - x, y_paw_start - y);
-    double centreleft0 = x_paw_start - 0.7237 * dist / 2;
-    double centreleft1 = y_paw_start + 0.69 * dist / 2;
-    for (int i = 1; i < oof; i++) {
-        std::vector<double> bez = {(float) x_paw_start, (float) y_paw_start, centreleft0, centreleft1, x, y};
-        auto [p0, p1] = input::bezier(1.0 * i / oof, bez, 6);
-        pss.push_back(p0);
-        pss.push_back(p1);
-    }
-    pss.push_back(x);
-    pss.push_back(y);
-    double a = y - centreleft1;
-    double b = centreleft0 - x;
-    double le = hypot(a, b);
-    a = x + a / le * 60;
-    b = y + b / le * 60;
-    int x_paw_end = paw_draw_info["pawEndingPoint"][0].asInt();
-    int y_paw_end = paw_draw_info["pawEndingPoint"][1].asInt();
-    dist = hypot(x_paw_end - a, y_paw_end - b);
-    double centreright0 = x_paw_end - 0.6 * dist / 2;
-    double centreright1 = y_paw_end + 0.8 * dist / 2;
-    int push = 20;
-    double s = x - centreleft0;
-    double t = y - centreleft1;
-    le = hypot(s, t);
-    s *= push / le;
-    t *= push / le;
-    double s2 = a - centreright0;
-    double t2 = b - centreright1;
-    le = hypot(s2, t2);
-    s2 *= push / le;
-    t2 *= push / le;
-    for (int i = 1; i < oof; i++) {
-        std::vector<double> bez = {x, y, x + s, y + t, a + s2, b + t2, a, b};
-        auto [p0, p1] = input::bezier(1.0 * i / oof, bez, 8);
-        pss.push_back(p0);
-        pss.push_back(p1);
-    }
-    pss.push_back(a);
-    pss.push_back(b);
-    for (int i = oof - 1; i > 0; i--) {
-        std::vector<double> bez = {1.0 * x_paw_end, 1.0 * y_paw_end, centreright0, centreright1, a, b};
-        auto [p0, p1] = input::bezier(1.0 * i / oof, bez, 6);
-        pss.push_back(p0);
-        pss.push_back(p1);
-    }
-    pss.push_back(x_paw_end);
-    pss.push_back(y_paw_end);
-    double mpos0 = (a + x) / 2 - 52 - 15;
-    double mpos1 = (b + y) / 2 - 34 + 5;
-    double dx = -38;
-    double dy = -50;
-
-    const int iter = 25;
-
-    std::vector<double> pss2 = {pss[0] + dx, pss[1] + dy};
-    for (int i = 1; i < iter; i++) {
-        auto [p0, p1] = input::bezier(1.0 * i / iter, pss, 38);
-        pss2.push_back(p0 + dx);
-        pss2.push_back(p1 + dy);
-    }
-    pss2.push_back(pss[36] + dx);
-    pss2.push_back(pss[37] + dy);
-
-    device.setPosition(mpos0 + dx + offset_x, mpos1 + dy + offset_y);
-
-    // drawing mouse
-    if (is_mouse) {
-        window.draw(device);
-    }
-
-    draw_arm_fill(pss, pss2);
-    draw_arm_outline(pss, pss2);
-}
-
 void draw_stretchy_arm() {
     auto [x, y] = input::where_mouse();
 
@@ -319,27 +223,16 @@ void draw_stretchy_arm() {
     double deg = alpha * toDeg;
     arm.setRotation(deg);
 
-    if (is_mouse) {
-        device.setPosition(handPos);
-        window.draw(device);
-    }
+    device.setPosition(handPos);
+    window.draw(device);
 
     window.draw(arm);
-}
-
-void draw_mouse() {
-    if (stretchy_arm) {
-        draw_stretchy_arm();
-    }
-    else {
-        black_magic();
-    }
 }
 
 void draw() {
     window.draw(desk);
 
-    draw_mouse();
+    draw_stretchy_arm();
 
     window.draw(cat);
     if (debug && stretchy_arm) {
@@ -436,11 +329,6 @@ void draw() {
         } else {
             window.draw(up);
         }
-    }
-
-    // drawing tablet
-    if (!is_mouse) {
-        window.draw(device);
     }
 
     // draw smoke

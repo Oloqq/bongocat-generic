@@ -1,14 +1,28 @@
-# xx
-avatar semi transparent in debug
-
 # x 2.0.0
-- avatar is now on a separate layer from the desk
-- toggle debug view with ctrl-d
-TODO cat synonymous with avatar
-TODO implement skins (config per skin)
-TODO auto resize window to match the desk / handle resize in config on ctrl-r
-TODO file renames
+- avatar is now on a separate layer from the desk, on top of the arm so the arm looks much better
+- toggle debug view with CTRL-D
+- removed distinction between mouse and tablet (achievable by skins)
+- filename changes
+    - `cat.png` -> `avatar.png`
+    - `mousebg.png` -> `desk.png`
+- config
+    - removed entries relating to original hand drawing
+    - `stretchyArm` key is no longer needed as it is now the only option
+
+TODO implement skins (config per skin)\
+TODO auto resize window to match the desk
+TODO remove stretchy arm from config
+
 - debug dots on top of cat
 
 # 1.0.0
-- initial
+- stretchy arm slapped on top of original app
+
+---
+---
+---
+
+# backlog
+- avatar semi transparent in debug\
+- some images could be loaded with transparent as default
+- support many monitors

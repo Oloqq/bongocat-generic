@@ -17,14 +17,12 @@
         "scalar": [1.0, 1.0]
     },
     "osu": {
-        "mouse": true,
         "paw": [0, 255, 255, 100],
         "pawEdge": [0, 0, 0],
         "key1": [90],
         "key2": [88],
         "smoke": [67],
         "wave": [86],
-        "stretchyArm": true,
         "debug": true,
         "anchor": [195, 240],
         "armAnchorOffset": [67, 0],
