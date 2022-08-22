@@ -29,6 +29,10 @@ const double PI = 3.141592653589793238462643383279502884;
 const double toDeg = 180.0 / PI;
 double catsMouseAngle;
 
+void toggle_debug() {
+    debug = !debug;
+}
+
 bool init() {
     // getting configs
     Json::Value osu = data::cfg["osu"];
@@ -321,11 +325,6 @@ void draw_stretchy_arm() {
     }
 
     window.draw(arm);
-    if (debug) {
-        window.draw(handMark);
-        window.draw(anchorMark);
-        window.draw(catsMouseMark);
-    }
 }
 
 void draw_mouse() {
@@ -343,6 +342,11 @@ void draw() {
     draw_mouse();
 
     window.draw(cat);
+    if (debug && stretchy_arm) {
+        window.draw(handMark);
+        window.draw(anchorMark);
+        window.draw(catsMouseMark);
+    }
     // drawing keypresses
     bool left_key = false;
 

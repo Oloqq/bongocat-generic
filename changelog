@@ -1,10 +1,14 @@
-# x
+# xx
+avatar semi transparent in debug
+
+# x 2.0.0
 - avatar is now on a separate layer from the desk
-TODO debug dots on top of cat
+- toggle debug view with ctrl-d
 TODO cat synonymous with avatar
 TODO implement skins (config per skin)
 TODO auto resize window to match the desk / handle resize in config on ctrl-r
 TODO file renames
+- debug dots on top of cat
 
 # 1.0.0
 - initial

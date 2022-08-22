@@ -48,6 +48,8 @@ void cleanup();
 }; // namespace input
 
 namespace osu {
+void toggle_debug();
+
 bool init();
 
 void draw();

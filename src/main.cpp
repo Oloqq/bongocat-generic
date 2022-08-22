@@ -53,7 +53,8 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 
                 // toggle joystick debug panel
                 if (event.key.code == sf::Keyboard::D && event.key.control) {
-                    is_show_input_debug = !is_show_input_debug;
+                    // is_show_input_debug = !is_show_input_debug;
+                    osu::toggle_debug();
                     break;
                 }
 
