@@ -5,5 +5,4 @@ Makefile
 bongo
 bin/*
 NOTE
-config.json
 .vscode
