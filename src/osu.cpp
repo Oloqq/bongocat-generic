@@ -120,7 +120,7 @@ bool init() {
     right.setTexture(data::load_texture(skinpath + "right.png"));
     wave.setTexture(data::load_texture(skinpath + "wave.png"));
     cat.setTexture(data::load_texture(skinpath + "avatar.png"));
-    desk.setTexture(data::load_texture(skinpath + "desk.png"));
+    desk.setTexture(data::load_texture(skinpath + "background.png"));
     device.setTexture(data::load_texture(skinpath + "mouse.png"), true);
     smoke.setTexture(data::load_texture(skinpath + "smoke.png"));
     arm.setTexture(data::load_texture(skinpath + "arm.png"));
