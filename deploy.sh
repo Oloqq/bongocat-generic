@@ -14,6 +14,7 @@ cmd.exe /c "make"
 
 mkdir            bin/deploy
 cp bin/bongo.exe bin/deploy
+cp skin.txt      bin/deploy
 cp changelog     bin/deploy
 cp WhyFork.md    bin/deploy
 cp -r skins      bin/deploy
