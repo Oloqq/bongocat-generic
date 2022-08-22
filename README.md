@@ -1,3 +1,6 @@
+# This is the original readme but much of it is out of date with the fork, ima redact it sometime soon
+# Check out WhyFork.md
+
 # Description
 An osu! Bongo Cat overlay with smooth paw movement and simple skinning ability, written in C++. Originally created by [HamishDuncanson](https://github.com/HamishDuncanson).
 

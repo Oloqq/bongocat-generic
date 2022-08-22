@@ -1,4 +1,4 @@
-# x 2.0.0
+# 2.0.0
 - avatar is now on a separate layer from the desk, and on top of the arm, so the arm looks much better
 - toggle debug view with CTRL-D
 - removed distinction between mouse and tablet (achievable by skins)

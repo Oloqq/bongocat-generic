@@ -20,7 +20,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
     while (!data::init()) {
         continue;
     }
-    window.create(sf::VideoMode(data::cfg["width"].asInt(), data::cfg["height"].asInt()), "Bongocat", sf::Style::Titlebar | sf::Style::Close);
+    window.create(sf::VideoMode(data::cfg["width"].asInt(), data::cfg["height"].asInt()), "Bongocat v2.0.0", sf::Style::Titlebar | sf::Style::Close);
     window.setFramerateLimit(MAX_FRAMERATE);
 
     // initialize input

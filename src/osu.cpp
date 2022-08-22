@@ -38,7 +38,7 @@ void toggle_debug() {
 
 bool init() {
     // getting configs
-    Json::Value osu = data::cfg["osu"];
+    Json::Value osu = data::cfg;
 
     stretchy_arm = osu["stretchyArm"].asBool();
     debug = osu["debug"].asBool();
